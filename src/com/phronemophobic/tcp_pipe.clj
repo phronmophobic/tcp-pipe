@@ -1,4 +1,4 @@
-(ns com.phronmophobic.tcp-pipe
+(ns com.phronemophobic.tcp-pipe
   (:require[clojure.core.async :as async]
            [taoensso.nippy :as nippy]
            [taoensso.tempel :as tempel])
