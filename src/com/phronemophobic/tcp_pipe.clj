@@ -29,16 +29,15 @@
                                    nippy/thaw))
                 (recur)))))
         (catch EOFException e
-          (async/close! write-ch)
           nil)
         (catch SocketException e
-          (async/close! write-ch)
           nil)
         (catch Throwable t
           (prn t)
           (tap> t)
           (throw t))
         (finally
+          (async/close! write-ch)
           (async/close! read-ch))))
 
     (future
@@ -59,16 +58,15 @@
                 (.write os bs))
               (recur))))
         (catch EOFException e
-          (async/close! read-ch)
           nil)
         (catch SocketException e
-          (async/close! read-ch)
           nil)
         (catch Throwable t
           (prn t)
           (tap> t)
           (throw t))
         (finally
+          (async/close! read-ch)
           (async/close! write-ch))))))
 
 
