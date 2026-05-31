@@ -18,7 +18,6 @@ Error handling is half baked.
 
 ;; start an echo server
 (defn echo-handler [socket]
-  (tap> (type socket))
   (future
     (with-open [socket socket]
       (let [read-ch (async/chan 10)
