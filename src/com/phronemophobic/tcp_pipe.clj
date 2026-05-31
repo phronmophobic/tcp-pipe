@@ -4,6 +4,8 @@
            [taoensso.tempel :as tempel])
   (:import [java.net InetSocketAddress Socket StandardSocketOptions ServerSocket]
            java.io.DataOutputStream
+           java.io.EOFException
+           java.net.SocketException
            java.io.DataInputStream))
 
 (defn handle-io [socket key write-ch read-ch]
@@ -26,6 +28,12 @@
                                    (tempel/decrypt-with-symmetric-key key)
                                    nippy/thaw))
                 (recur)))))
+        (catch EOFException e
+          (async/close! write-ch)
+          nil)
+        (catch SocketException e
+          (async/close! write-ch)
+          nil)
         (catch Throwable t
           (prn t)
           (tap> t)
@@ -50,6 +58,12 @@
                 (.writeInt os (alength bs))
                 (.write os bs))
               (recur))))
+        (catch EOFException e
+          (async/close! read-ch)
+          nil)
+        (catch SocketException e
+          (async/close! read-ch)
+          nil)
         (catch Throwable t
           (prn t)
           (tap> t)
