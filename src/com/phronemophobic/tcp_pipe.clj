@@ -39,8 +39,7 @@
           (tap> t)
           (throw t))
         (finally
-          (async/close! read-ch)
-          (prn "stopping read"))))
+          (async/close! read-ch))))
 
     (future
       (try
@@ -69,8 +68,7 @@
           (tap> t)
           (throw t))
         (finally
-          (async/close! write-ch)
-          (prn "writing read"))))))
+          (async/close! write-ch))))))
 
 
 
