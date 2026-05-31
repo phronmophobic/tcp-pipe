@@ -2,7 +2,9 @@
 
 A very simple tcp server and client.
 
-Assumes length prefixed messages serialized with nippy and symmetric key encryption via tempel.
+Assumes length prefixed messages serialized with nippy and symmetric key encryption via tempel. Coordination is via clojure.core.async.
+
+Error handling is half baked.
 
 ## Usage
 
