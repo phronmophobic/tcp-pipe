@@ -8,7 +8,7 @@
            java.net.SocketException
            java.io.DataInputStream))
 
-(defn handle-io [socket key write-ch read-ch]
+(defn handle-io [^Socket socket key write-ch read-ch]
   (let [is (.getInputStream socket)
         os (.getOutputStream socket)]
     (future
@@ -51,7 +51,8 @@
                     os (DataOutputStream. os)]
           (loop []
             (when-let [val (async/<!! write-ch)]
-              (let [bs (-> val
+              (let [^bytes
+                    bs (-> val
                            nippy/freeze
                            (tempel/encrypt-with-symmetric-key key))]
                 (.writeInt os (alength bs))
@@ -73,7 +74,7 @@
 
 
 (defn start-server [port handler]
-  (let [serverSocket ( ServerSocket. port)]
+  (let [serverSocket (ServerSocket. port)]
     (future
       (try
         (loop []
@@ -84,8 +85,8 @@
           (prn "stopping server"))))
     serverSocket))
 
-(defn start-client [host port key write-ch read-ch]
-  (let [socket (Socket. host port)]
+(defn start-client [^String host port key write-ch read-ch]
+  (let [socket (Socket. host (int port))]
     (handle-io socket key write-ch read-ch)
     socket))
 
